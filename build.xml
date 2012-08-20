@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project name="CalcRelevanciaServico" default="compile">
+
+	<property environment="env" />
+
+	<!-- Propriedades -->
+	<property file="build.properties" />
+	<property name="app.title" value="Ferramenta para C&#225;lculo do &#205;ndice de Relev&#226;ncia dos Servi&#231;os" />
+	<property name="app.author" value="Rodrigo Mendes Leme" />
+	<property name="app.vendor" value="Instituto de Pesquisas Tecnol&#243;gicas (IPT)" />
+	<property name="app.version" value="1.0.0" />
+
+	<!-- Caminho JVM -->
+	<property name="server.javac.executable" value="${java.home}/bin/javac" />
+
+	<!-- Diretorios -->
+	<property name="docs.dir" value="docs" />
+	<property name="src.dir" location="src" />
+	<property name="lib.dir" location="lib/src" />
+	<property name="build.dir" location="build" />
+	<property name="dist.dir" value="dist" />
+	<property name="build.classes.dir" location="${build.dir}/classes" />
+	<property name="rsc.dir" location="resources" />
+	<property name="test.dir" location="test" />
+	<property name="test.lib.dir" location="lib/test" />
+	<property name="test.build.dir" location="${build.dir}/test" />
+	<property name="test.results.dir" value="testresults" />
+
+	<!-- Pacote -->
+	<property name="CalcRelevanciaServico.jar.name" value="CalcRelevanciaServico.jar" />
+	<property name="CalcRelevanciaServico.zip.name" value="CalcRelevanciaServico.zip" />
+
+
+
+	<path id="classpath">
+		<pathelement location="${build.classes.dir}" />
+		<fileset dir="${lib.dir}">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+
+	<path id="test.classpath">
+		<pathelement location="${build.classes.dir}" />
+		<pathelement location="${test.build.dir}" />
+		<fileset dir="${test.lib.dir}">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+
+
+
+	<target name="clean-doc">
+		<delete dir="${docs.dir}" />
+	</target>
+
+	<target name="doc" depends="clean-doc">
+		<javadoc destdir="${docs.dir}" version="true" use="true" author="true" doctitle="${app.title}" windowtitle="${app.title}">
+			<fileset dir="${src.dir}">
+				<include name="**/*.java" />
+				<include name="**/*.html" />
+			</fileset>
+			<classpath refid="classpath" />
+		</javadoc>
+	</target>
+
+	<target name="clean">
+		<delete includeemptydirs="true">
+			<fileset dir="${build.dir}" includes="**/*" />
+		</delete>
+		<delete file="CalcRelevanciaServico.log" />
+		<delete dir="${test.results.dir}" />
+		<delete dir="${dist.dir}" />
+	</target>
+
+	<target name="init" depends="clean">
+		<mkdir dir="${build.classes.dir}" />
+		<copy includeemptydirs="false" todir="${build.classes.dir}">
+			<fileset dir="${src.dir}" excludes="**/*.launch, **/*.java" />
+		</copy>
+
+		<mkdir dir="${test.build.dir}" />
+		<copy includeemptydirs="false" todir="${test.build.dir}">
+			<fileset dir="${test.dir}" excludes="**/*.launch, **/*.java" />
+		</copy>
+	</target>
+
+	<target name="compile" depends="init">
+		<javac debug="true" debuglevel="${debuglevel}" destdir="${build.classes.dir}" executable="${server.javac.executable}" source="${source}" target="${target}">
+			<src path="${src.dir}" />
+			<classpath refid="classpath" />
+		</javac>
+	</target>
+
+	<target name="dist" depends="compile">
+		<mkdir dir="${dist.dir}" />
+
+		<mkdir dir="${dist.dir}/lib" />
+		<copy includeemptydirs="false" todir="${dist.dir}/lib">
+			<fileset dir="${lib.dir}" includes="**/*.jar" />
+		</copy>
+
+		<manifestclasspath property="jar.classpath" jarfile="${dist.dir}/${CalcRelevanciaServico.jar.name}">
+			<classpath>
+				<fileset dir="${dist.dir}/lib">
+					<include name="**/*.jar" />
+				</fileset>
+			</classpath>
+		</manifestclasspath>
+
+		<jar destfile="${dist.dir}/${CalcRelevanciaServico.jar.name}">
+			<fileset dir="${build.classes.dir}" />
+			<fileset dir="${rsc.dir}/licenses" />
+			<manifest>
+				<attribute name="Built-By" value="${app.author}" />
+
+				<attribute name="Implementation-Vendor" value="${app.vendor}" />
+				<attribute name="Implementation-Title" value="${app.title}" />
+				<attribute name="Implementation-Version" value="${app.version}" />
+				<attribute name="Specification-Vendor" value="${app.vendor}" />
+				<attribute name="Specification-Title" value="${app.title}" />
+				<attribute name="Specification-Version" value="${app.version}" />
+
+				<attribute name="Class-Path" value="${jar.classpath}" />
+				<attribute name="Main-Class" value="br.ipt.servico.relevancia.selecao.TelaPrincipal" />
+			</manifest>
+		</jar>
+
+		<zip destfile="${dist.dir}/${CalcRelevanciaServico.zip.name}">
+			<zipfileset file="${dist.dir}/${CalcRelevanciaServico.jar.name}" />
+			<zipfileset dir="${dist.dir}/lib" prefix="lib" />
+		</zip>
+
+		<delete file="${dist.dir}/${CalcRelevanciaServico.jar.name}" />
+		<delete dir="${dist.dir}/lib" />
+	</target>
+
+	<target name="run" depends="compile">
+		<java classname="br.ipt.servico.relevancia.selecao.TelaPrincipal" failonerror="true" fork="yes">
+			<classpath refid="classpath" />
+		</java>
+	</target>
+
+	<target name="compile-tests" depends="compile">
+		<javac debug="true" debuglevel="${debuglevel}" destdir="${test.build.dir}" executable="${server.javac.executable}" source="${source}" target="${target}">
+			<src path="${test.dir}" />
+			<classpath refid="classpath" />
+			<classpath refid="test.classpath" />
+		</javac>
+	</target>
+
+	<target name="test" depends="compile-tests">
+		<mkdir dir="${test.results.dir}" />
+		<junit fork="yes" printsummary="on" haltonfailure="no">
+			<classpath>
+				<path refid="classpath" />
+				<path refid="test.classpath" />
+				<pathelement location="${build.classes.dir}" />
+				<pathelement location="${test.build.dir}" />
+			</classpath>
+
+			<formatter type="plain" />
+
+			<batchtest todir="${test.results.dir}">
+				<fileset dir="${test.build.dir}">
+					<include name="**/*Teste*.class" />
+				</fileset>
+			</batchtest>
+		</junit>
+	</target>
+</project>

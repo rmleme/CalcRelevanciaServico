@@ -1,0 +1,145 @@
+<definitions name='Servico' targetNamespace='http://www.ipt.br/soa'
+	xmlns='http://schemas.xmlsoap.org/wsdl/' xmlns:soap='http://schemas.xmlsoap.org/wsdl/soap/'
+	xmlns:tns='http://www.ipt.br/soa' xmlns:xsd='http://www.w3.org/2001/XMLSchema'>
+	<types>
+		<xs:schema elementFormDefault='qualified' targetNamespace='http://www.ipt.br/soa'
+			version='1.0' xmlns:tns='http://www.ipt.br/soa' xmlns:xs='http://www.w3.org/2001/XMLSchema'>
+			<xs:element name='inputOperacao1' nillable='true'
+				type='tns:InputOperacao' />
+			<xs:element name='inputOperacao2' nillable='true'
+				type='tns:InputOperacao' />
+			<xs:element name='inputOperacao3' nillable='true'
+				type='tns:InputOperacao' />
+			<xs:element name='inputOperacao4' nillable='true'
+				type='tns:InputOperacao' />
+			<xs:element name='inputOperacao5' nillable='true'
+				type='tns:InputOperacao' />
+			<xs:element name='outputOperacao1' nillable='true'
+				type='tns:OutputOperacao' />
+			<xs:element name='outputOperacao2' nillable='true'
+				type='tns:OutputOperacao' />
+			<xs:element name='outputOperacao3' nillable='true'
+				type='tns:OutputOperacao' />
+			<xs:element name='outputOperacao4' nillable='true'
+				type='tns:OutputOperacao' />
+			<xs:element name='outputOperacao5' nillable='true'
+				type='tns:OutputOperacao' />
+			<xs:complexType name='InputOperacao'>
+				<xs:sequence>
+					<xs:element name='texto' type='xs:string' />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name='OutputOperacao'>
+				<xs:sequence>
+					<xs:element name='texto' type='xs:string' />
+				</xs:sequence>
+			</xs:complexType>
+		</xs:schema>
+	</types>
+	<message name='Servico_operacao4Response'>
+		<part element='tns:outputOperacao4' name='output'></part>
+	</message>
+	<message name='Servico_operacao2'>
+		<part element='tns:inputOperacao2' name='input'></part>
+	</message>
+	<message name='Servico_operacao3'>
+		<part element='tns:inputOperacao3' name='input'></part>
+	</message>
+	<message name='Servico_operacao4'>
+		<part element='tns:inputOperacao4' name='input'></part>
+	</message>
+	<message name='Servico_operacao5'>
+		<part element='tns:inputOperacao5' name='input'></part>
+	</message>
+	<message name='Servico_operacao3Response'>
+		<part element='tns:outputOperacao3' name='output'></part>
+	</message>
+	<message name='Servico_operacao1'>
+		<part element='tns:inputOperacao1' name='input'></part>
+	</message>
+	<message name='Servico_operacao5Response'>
+		<part element='tns:outputOperacao5' name='output'></part>
+	</message>
+	<message name='Servico_operacao1Response'>
+		<part element='tns:outputOperacao1' name='output'></part>
+	</message>
+	<message name='Servico_operacao2Response'>
+		<part element='tns:outputOperacao2' name='output'></part>
+	</message>
+	<portType name='Servico'>
+		<operation name='operacao1' parameterOrder='input'>
+			<input message='tns:Servico_operacao1'></input>
+			<output message='tns:Servico_operacao1Response'></output>
+		</operation>
+		<operation name='operacao2' parameterOrder='input'>
+			<input message='tns:Servico_operacao2'></input>
+			<output message='tns:Servico_operacao2Response'></output>
+		</operation>
+		<operation name='operacao3' parameterOrder='input'>
+			<input message='tns:Servico_operacao3'></input>
+			<output message='tns:Servico_operacao3Response'></output>
+		</operation>
+		<operation name='operacao4' parameterOrder='input'>
+			<input message='tns:Servico_operacao4'></input>
+			<output message='tns:Servico_operacao4Response'></output>
+		</operation>
+		<operation name='operacao5' parameterOrder='input'>
+			<input message='tns:Servico_operacao5'></input>
+			<output message='tns:Servico_operacao5Response'></output>
+		</operation>
+	</portType>
+	<binding name='ServicoBinding' type='tns:Servico'>
+		<soap:binding style='document'
+			transport='http://schemas.xmlsoap.org/soap/http' />
+		<operation name='operacao1'>
+			<soap:operation soapAction='' />
+			<input>
+				<soap:body use='literal' />
+			</input>
+			<output>
+				<soap:body use='literal' />
+			</output>
+		</operation>
+		<operation name='operacao2'>
+			<soap:operation soapAction='' />
+			<input>
+				<soap:body use='literal' />
+			</input>
+			<output>
+				<soap:body use='literal' />
+			</output>
+		</operation>
+		<operation name='operacao3'>
+			<soap:operation soapAction='' />
+			<input>
+				<soap:body use='literal' />
+			</input>
+			<output>
+				<soap:body use='literal' />
+			</output>
+		</operation>
+		<operation name='operacao4'>
+			<soap:operation soapAction='' />
+			<input>
+				<soap:body use='literal' />
+			</input>
+			<output>
+				<soap:body use='literal' />
+			</output>
+		</operation>
+		<operation name='operacao5'>
+			<soap:operation soapAction='' />
+			<input>
+				<soap:body use='literal' />
+			</input>
+			<output>
+				<soap:body use='literal' />
+			</output>
+		</operation>
+	</binding>
+	<service name='Servico'>
+		<port binding='tns:ServicoBinding' name='ServicoPort'>
+			<soap:address location='http://127.0.0.1:8080/TesteColetaMetricas/Servico/Servico' />
+		</port>
+	</service>
+</definitions>

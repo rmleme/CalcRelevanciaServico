@@ -1,0 +1,17 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<BPELSuitcase>
+   <BPELProcess id="Teste" src="Teste.bpel">
+      <partnerLinkBindings>
+         <partnerLinkBinding name="client">
+            <property name="wsdlLocation">TesteColetaMetricas.wsdl</property>
+         </partnerLinkBinding>
+         <partnerLinkBinding name="Servico">
+            <property name="wsdlLocation">ServicoBeanRef.wsdl</property>
+            <property name="idempotent">false</property>
+         </partnerLinkBinding>
+      </partnerLinkBindings>
+      <configurations>
+         <property name="sensorActionLocation">sensorAction.xml</property>
+      </configurations>
+   </BPELProcess>
+</BPELSuitcase>

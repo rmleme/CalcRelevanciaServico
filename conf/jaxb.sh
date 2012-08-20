@@ -1,0 +1,1 @@
+$JAVA_HOME/bin/xjc -p br.ipt.servico.relevancia.modelo http://schemas.xmlsoap.org/ws/2003/03/business-process/
