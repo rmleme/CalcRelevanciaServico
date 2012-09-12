@@ -215,7 +215,7 @@ public class ParserBPEL {
 		.getPartnerLink()
 		+ "." + tInvoke.getOperation());
 	rotulosVertice.put(Vertice.Rotulo.URL, processoNegocio
-		.obterURLParterLink(tInvoke.getPartnerLink()));
+		.obterURLPartnerLink(tInvoke.getPartnerLink()));
 	Vertice vertice = new Vertice(rotulosVertice);
 
 	if (grafo.containsVertex(vertice)) {
