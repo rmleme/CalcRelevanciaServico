@@ -113,7 +113,7 @@ public class ProcessoNegocio implements Comparable<ProcessoNegocio> {
 	return new Integer(this.id).compareTo(processoNegocio.getId());
     }
 
-    public String obterURLParterLink(String nomePartnerLink) {
+    public String obterURLPartnerLink(String nomePartnerLink) {
 	for (PartnerLink partnerLink : this.partnerLinks) {
 	    if (partnerLink.getNome().equals(nomePartnerLink)) {
 		return partnerLink.getURLServico();
