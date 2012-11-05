@@ -2,11 +2,12 @@ package br.ipt.servico.relevancia.teste.selecao;
 
 import static org.junit.Assert.assertEquals;
 
-import java.util.Map;
+import java.util.Set;
 
 import org.junit.Test;
 
 import br.ipt.servico.relevancia.selecao.CalculadoraRelevanciaServicos;
+import br.ipt.servico.relevancia.selecao.Relevancia;
 import br.ipt.servico.relevancia.teste.Constantes.ConstantesCalculadoraRelevancia;
 
 /**
@@ -21,32 +22,32 @@ public class TesteCalculadoraRelevanciaServicos {
     public void testeCalcularSucesso() throws Exception {
 	CalculadoraRelevanciaServicos calculadora = new CalculadoraRelevanciaServicos();
 
-	Map<String, Double> servicos = calculadora
+	Set<Relevancia> servicos = calculadora
 		.calcular(ConstantesCalculadoraRelevancia.MULTIDIGRAFO);
 
 	assertEquals(
 		"servicos nao bate.",
 		ConstantesCalculadoraRelevancia.MULTIDIGRAFO.getVertexCount() - 2,
 		servicos.size());
-	assertEquals(
-		"servicos[SERVICO_OPERACAO_1] nao bate.",
-		ConstantesCalculadoraRelevancia.RELEVANCIA_OPERACAO_1,
-		servicos
-			.get(ConstantesCalculadoraRelevancia.SERVICO_OPERACAO_1)
-			.doubleValue(), 0);
-	assertEquals(
-		"servicos[SERVICO_OPERACAO_2] nao bate.",
-		ConstantesCalculadoraRelevancia.RELEVANCIA_OPERACAO_2,
-		servicos
-			.get(ConstantesCalculadoraRelevancia.SERVICO_OPERACAO_2)
-			.doubleValue(), 0);
+	for (Relevancia r : servicos) {
+	    if (r.equals(ConstantesCalculadoraRelevancia.RELEVANCIA_OPERACAO_1)) {
+		assertEquals("servicos[SERVICO_OPERACAO_1] nao bate.",
+			ConstantesCalculadoraRelevancia.RELEVANCIA_OPERACAO_1
+				.getRelevancia(), r.getRelevancia(), 0);
+	    }
+	    if (r.equals(ConstantesCalculadoraRelevancia.RELEVANCIA_OPERACAO_2)) {
+		assertEquals("servicos[SERVICO_OPERACAO_2] nao bate.",
+			ConstantesCalculadoraRelevancia.RELEVANCIA_OPERACAO_2
+				.getRelevancia(), r.getRelevancia(), 0);
+	    }
+	}
     }
 
     @Test
     public void testeCalcularMultidigrafoNulo() throws Exception {
 	CalculadoraRelevanciaServicos calculadora = new CalculadoraRelevanciaServicos();
 
-	Map<String, Double> servicos = calculadora.calcular(null);
+	Set<Relevancia> servicos = calculadora.calcular(null);
 
 	assertEquals("servicos nao bate.", 0, servicos.size());
     }
