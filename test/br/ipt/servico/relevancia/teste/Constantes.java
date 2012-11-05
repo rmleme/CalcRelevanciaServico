@@ -14,6 +14,7 @@ import br.ipt.servico.relevancia.multidigrafo.Arco;
 import br.ipt.servico.relevancia.multidigrafo.Vertice;
 import br.ipt.servico.relevancia.multidigrafo.VerticeFim;
 import br.ipt.servico.relevancia.multidigrafo.VerticeInicio;
+import br.ipt.servico.relevancia.selecao.Relevancia;
 import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
 import edu.uci.ics.jung.graph.Graph;
 
@@ -220,8 +221,8 @@ public class Constantes {
 
     public static class ConstantesCalculadoraRelevancia extends
 	    ConstantesMultidigrafo {
-	public static double RELEVANCIA_OPERACAO_1;
-	public static double RELEVANCIA_OPERACAO_2;
+	public static Relevancia RELEVANCIA_OPERACAO_1 = new Relevancia();
+	public static Relevancia RELEVANCIA_OPERACAO_2 = new Relevancia();
 	static {
 	    double mediaGrauDeEntrada = ((double) MULTIDIGRAFO.inDegree(v1) + MULTIDIGRAFO
 		    .inDegree(v2))
@@ -239,30 +240,51 @@ public class Constantes {
 			    .obterValorRotulo(Arco.Rotulo.NUMERO_INVOCACOES)))
 		    / (MULTIDIGRAFO.getVertexCount() - 2);
 
-	    RELEVANCIA_OPERACAO_1 = (MULTIDIGRAFO.inDegree(v1) / mediaGrauDeEntrada)
-		    * ((Double.parseDouble(a1
-			    .obterValorRotulo(Arco.Rotulo.NUMERO_INVOCACOES)) + Double
-			    .parseDouble(a4
-				    .obterValorRotulo(Arco.Rotulo.NUMERO_INVOCACOES))) / mediaNumeroInvocacoes)
-		    * (Double
+	    RELEVANCIA_OPERACAO_1.setServicoOperacao(SERVICO_OPERACAO_1);
+	    RELEVANCIA_OPERACAO_1.setRelevanciaEstatica(MULTIDIGRAFO
+		    .inDegree(v1)
+		    / mediaGrauDeEntrada);
+	    RELEVANCIA_OPERACAO_1.setRelevanciaDinamica((Double.parseDouble(a1
+		    .obterValorRotulo(Arco.Rotulo.NUMERO_INVOCACOES)) + Double
+		    .parseDouble(a4
+			    .obterValorRotulo(Arco.Rotulo.NUMERO_INVOCACOES)))
+		    / mediaNumeroInvocacoes);
+	    RELEVANCIA_OPERACAO_1
+		    .setRelevanciaDeDesempenho(Double
 			    .parseDouble(v1
-				    .obterValorRotulo(Vertice.Rotulo.TEMPO_MEDIO_EXECUCAO)) / Double
-			    .parseDouble(v1
-				    .obterValorRotulo(Vertice.Rotulo.TEMPO_RESPOSTA_ESPERADO)));
+				    .obterValorRotulo(Vertice.Rotulo.TEMPO_MEDIO_EXECUCAO))
+			    / Double
+				    .parseDouble(v1
+					    .obterValorRotulo(Vertice.Rotulo.TEMPO_RESPOSTA_ESPERADO)));
+	    RELEVANCIA_OPERACAO_1.setRelevancia(RELEVANCIA_OPERACAO_1
+		    .getRelevanciaEstatica()
+		    * RELEVANCIA_OPERACAO_1.getRelevanciaDinamica()
+		    * RELEVANCIA_OPERACAO_1.getRelevanciaDeDesempenho());
 
-	    RELEVANCIA_OPERACAO_2 = (MULTIDIGRAFO.inDegree(v2) / mediaGrauDeEntrada)
-		    * ((Double.parseDouble(a2
+	    RELEVANCIA_OPERACAO_2.setServicoOperacao(SERVICO_OPERACAO_2);
+	    RELEVANCIA_OPERACAO_2.setRelevanciaEstatica(MULTIDIGRAFO
+		    .inDegree(v2)
+		    / mediaGrauDeEntrada);
+	    RELEVANCIA_OPERACAO_2
+		    .setRelevanciaDinamica((Double.parseDouble(a2
 			    .obterValorRotulo(Arco.Rotulo.NUMERO_INVOCACOES))
 			    + Double
 				    .parseDouble(a3
 					    .obterValorRotulo(Arco.Rotulo.NUMERO_INVOCACOES)) + Double
 			    .parseDouble(a5
-				    .obterValorRotulo(Arco.Rotulo.NUMERO_INVOCACOES))) / mediaNumeroInvocacoes)
-		    * (Double
+				    .obterValorRotulo(Arco.Rotulo.NUMERO_INVOCACOES)))
+			    / mediaNumeroInvocacoes);
+	    RELEVANCIA_OPERACAO_2
+		    .setRelevanciaDeDesempenho(Double
 			    .parseDouble(v2
-				    .obterValorRotulo(Vertice.Rotulo.TEMPO_MEDIO_EXECUCAO)) / Double
-			    .parseDouble(v2
-				    .obterValorRotulo(Vertice.Rotulo.TEMPO_RESPOSTA_ESPERADO)));
+				    .obterValorRotulo(Vertice.Rotulo.TEMPO_MEDIO_EXECUCAO))
+			    / Double
+				    .parseDouble(v2
+					    .obterValorRotulo(Vertice.Rotulo.TEMPO_RESPOSTA_ESPERADO)));
+	    RELEVANCIA_OPERACAO_2.setRelevancia(RELEVANCIA_OPERACAO_2
+		    .getRelevanciaEstatica()
+		    * RELEVANCIA_OPERACAO_2.getRelevanciaDinamica()
+		    * RELEVANCIA_OPERACAO_2.getRelevanciaDeDesempenho());
 	}
     }
 
