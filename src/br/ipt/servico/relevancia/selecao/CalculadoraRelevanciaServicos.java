@@ -1,7 +1,7 @@
 package br.ipt.servico.relevancia.selecao;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 
@@ -21,9 +21,9 @@ public class CalculadoraRelevanciaServicos {
 
     private Logger log = Logger.getLogger(CalculadoraRelevanciaServicos.class);
 
-    public Map<String, Double> calcular(Graph<Vertice, Arco> multidigrafo) {
+    public Set<Relevancia> calcular(Graph<Vertice, Arco> multidigrafo) {
 	if (multidigrafo == null) {
-	    return new HashMap<String, Double>();
+	    return new HashSet<Relevancia>();
 	}
 
 	int numeroVertices = 0;
@@ -40,14 +40,24 @@ public class CalculadoraRelevanciaServicos {
 	    }
 	}
 
-	Map<String, Double> servicos = new HashMap<String, Double>();
+	Set<Relevancia> servicos = new HashSet<Relevancia>();
 	for (Vertice vertice : multidigrafo.getVertices()) {
 	    if (!(vertice instanceof VerticeInicio || vertice instanceof VerticeFim)) {
-		servicos.put(vertice
-			.obterValorRotulo(Vertice.Rotulo.SERVICO_OPERACAO),
-			this.calcularRelevancia(multidigrafo, vertice,
-				numeroVertices, somaGrauDeEntrada,
-				somaNumeroInvocacoes));
+		Relevancia r = new Relevancia();
+		r.setServicoOperacao(vertice
+			.obterValorRotulo(Vertice.Rotulo.SERVICO_OPERACAO));
+		r.setRelevanciaEstatica(this.calcularRelevanciaEstatica(
+			multidigrafo, vertice, numeroVertices,
+			somaGrauDeEntrada));
+		r.setRelevanciaDinamica(this.calcularRelevanciaDinamica(
+			multidigrafo, vertice, numeroVertices,
+			somaNumeroInvocacoes));
+		r.setRelevanciaDeDesempenho(this
+			.calcularRelevanciaDeDesempenho(vertice));
+		r.setRelevancia(this.calcularRelevancia(vertice, r
+			.getRelevanciaEstatica(), r.getRelevanciaDinamica(), r
+			.getRelevanciaDeDesempenho()));
+		servicos.add(r);
 	    }
 	}
 	return servicos;
@@ -86,17 +96,14 @@ public class CalculadoraRelevanciaServicos {
 	return relevanciaDeDesempenho;
     }
 
-    private double calcularRelevancia(Graph<Vertice, Arco> multidigrafo,
-	    Vertice vertice, int numeroVertices, int somaGrauDeEntrada,
-	    double somaNumeroInvocacoes) {
+    private double calcularRelevancia(Vertice vertice,
+	    double relevanciaEstatica, double relevanciaDinamica,
+	    double relevanciaDeDesempenho) {
 	this.log.debug("Calculando a relevancia do servico "
 		+ vertice.obterValorRotulo(Vertice.Rotulo.SERVICO_OPERACAO)
 		+ "...");
-	double relevancia = this.calcularRelevanciaEstatica(multidigrafo,
-		vertice, numeroVertices, somaGrauDeEntrada)
-		* this.calcularRelevanciaDinamica(multidigrafo, vertice,
-			numeroVertices, somaNumeroInvocacoes)
-		* this.calcularRelevanciaDeDesempenho(vertice);
+	double relevancia = relevanciaEstatica * relevanciaDinamica
+		* relevanciaDeDesempenho;
 	this.log.debug("Relevancia = " + relevancia);
 	return relevancia;
     }
