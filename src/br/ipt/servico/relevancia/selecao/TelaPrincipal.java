@@ -19,7 +19,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
@@ -70,17 +69,17 @@ public class TelaPrincipal extends JFrame {
 
         flcImportarPN.setAcceptAllFileFilterUsed(false);
         flcImportarPN.setCurrentDirectory(new java.io.File("C:\\"));
-            flcImportarPN.setDialogTitle("Importar Processo de Negócio");
+            flcImportarPN.setDialogTitle("Importar Processo de NegÃ³cio");
             flcImportarPN.setFileFilter(new BPELFileFilter());
 
             flcExportarListaServicos.setAcceptAllFileFilterUsed(false);
             flcExportarListaServicos.setDialogType(javax.swing.JFileChooser.SAVE_DIALOG);
             flcExportarListaServicos.setCurrentDirectory(new java.io.File("C:\\"));
-                flcExportarListaServicos.setDialogTitle("Exportar Lista de Serviços");
+                flcExportarListaServicos.setDialogTitle("Exportar Lista de ServiÃ§os");
                 flcExportarListaServicos.setFileFilter(new CSVFileFilter());
 
                 setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-                setTitle("SOA - IPT - Ferramenta para Cálculo do Índice de Relevância dos Serviços");
+                setTitle("SOA - IPT - Ferramenta para CÃ¡lculo do Ãndice de RelevÃ¢ncia dos ServiÃ§os");
                 setName("frmTelaPrincipal");
 
                 btnImportarPN.setText("Importar PN");
@@ -90,7 +89,7 @@ public class TelaPrincipal extends JFrame {
                     }
                 });
 
-                lblPN.setText("Processos de negócio");
+                lblPN.setText("Processos de negÃ³cio");
 
                 lstPN.setModel(new DefaultListModel());
                 scpPN.setViewportView(lstPN);
@@ -102,7 +101,7 @@ public class TelaPrincipal extends JFrame {
                     }
                 });
 
-                btnColetarMetricas.setText("Coletar métricas");
+                btnColetarMetricas.setText("Coletar mÃ©tricas");
                 btnColetarMetricas.addActionListener(new java.awt.event.ActionListener() {
                     public void actionPerformed(java.awt.event.ActionEvent evt) {
                         btnColetarMetricasActionPerformed(evt);
@@ -114,14 +113,14 @@ public class TelaPrincipal extends JFrame {
                 tblServicos.getTableHeader().setReorderingAllowed(false);
                 scpServicos.setViewportView(tblServicos);
 
-                btnCalcularRelevancia.setText("Calcular relevância");
+                btnCalcularRelevancia.setText("Calcular relevÃ¢ncia");
                 btnCalcularRelevancia.addActionListener(new java.awt.event.ActionListener() {
                     public void actionPerformed(java.awt.event.ActionEvent evt) {
                         btnCalcularRelevanciaActionPerformed(evt);
                     }
                 });
 
-                btnExportarListaServicos.setText("Exportar lista de serviços");
+                btnExportarListaServicos.setText("Exportar lista de serviÃ§os");
                 btnExportarListaServicos.addActionListener(new java.awt.event.ActionListener() {
                     public void actionPerformed(java.awt.event.ActionEvent evt) {
                         btnExportarListaServicosActionPerformed(evt);
@@ -559,18 +558,18 @@ class SelecaoPNRenderer extends JLabel implements ListCellRenderer {
 class ListaServicosTableModel extends AbstractTableModel {
 
     private String[] nomesColunas;
-    private List<Entry<String, Double>> listaServicos;
+    private List<Relevancia> listaServicos;
 
     public ListaServicosTableModel() {
-        this.nomesColunas = new String[]{"Servi\u00E7o", "Relev\u00E2ncia"};
-        this.listaServicos = new ArrayList<Entry<String, Double>>();
+        this.nomesColunas = new String[]{"Servi\u00E7o", "Rel. est\u00E1tica", "Rel. din\u00E2mica", "Rel. de desempenho", "Relev\u00E2ncia"};
+        this.listaServicos = new ArrayList<Relevancia>();
     }
 
-    public void adicionarItens(Map<String, Double> relevanciaServicos) {
+    public void adicionarItens(Set<Relevancia> relevanciaServicos) {
         this.listaServicos.clear();
         this.fireTableRowsDeleted(0, this.listaServicos.isEmpty() ? 0 : this.listaServicos.size() - 1);
 
-        this.listaServicos.addAll(relevanciaServicos.entrySet());
+        this.listaServicos.addAll(relevanciaServicos);
         Collections.sort(this.listaServicos, Collections.reverseOrder(new ComparatorRelevancia()));
         this.fireTableRowsInserted(0, this.listaServicos.isEmpty() ? 0 : this.listaServicos.size() - 1);
     }
@@ -591,14 +590,40 @@ class ListaServicosTableModel extends AbstractTableModel {
         if (columnIndex < 0 || columnIndex > this.nomesColunas.length - 1) {
             throw new IllegalArgumentException("indice de coluna invalido (columnIndex = " + columnIndex + ").");
         }
-        return columnIndex == 0 ? this.listaServicos.get(rowIndex).getKey() : this.listaServicos.get(rowIndex).getValue();
+        switch (columnIndex) {
+            case 0:
+                return this.listaServicos.get(rowIndex).getServicoOperacao();
+            case 1:
+                return this.listaServicos.get(rowIndex).getRelevanciaEstatica();
+            case 2:
+                return this.listaServicos.get(rowIndex).getRelevanciaDinamica();
+            case 3:
+                return this.listaServicos.get(rowIndex).getRelevanciaDeDesempenho();
+            case 4:
+                return this.listaServicos.get(rowIndex).getRelevancia();
+            default:
+                return "";
+        }
     }
 
     public String getStringValueAt(int rowIndex, int columnIndex) {
         if (columnIndex < 0 || columnIndex > this.nomesColunas.length - 1) {
             throw new IllegalArgumentException("indice de coluna invalido (columnIndex = " + columnIndex + ").");
         }
-        return columnIndex == 0 ? this.listaServicos.get(rowIndex).getKey() : this.listaServicos.get(rowIndex).getValue().toString();
+        switch (columnIndex) {
+            case 0:
+                return this.listaServicos.get(rowIndex).getServicoOperacao();
+            case 1:
+                return String.valueOf(this.listaServicos.get(rowIndex).getRelevanciaEstatica());
+            case 2:
+                return String.valueOf(this.listaServicos.get(rowIndex).getRelevanciaDinamica());
+            case 3:
+                return String.valueOf(this.listaServicos.get(rowIndex).getRelevanciaDeDesempenho());
+            case 4:
+                return String.valueOf(this.listaServicos.get(rowIndex).getRelevancia());
+            default:
+                return "";
+        }
     }
 
     public Class getColumnClass(int columnIndex) {
@@ -606,9 +631,9 @@ class ListaServicosTableModel extends AbstractTableModel {
     }
 }
 
-class ComparatorRelevancia implements Comparator<Entry<String, Double>> {
+class ComparatorRelevancia implements Comparator<Relevancia> {
 
-    public int compare(Entry<String, Double> item1, Entry<String, Double> item2) {
-        return Double.compare(item1.getValue(), item2.getValue());
+    public int compare(Relevancia item1, Relevancia item2) {
+        return Double.compare(item1.getRelevancia(), item2.getRelevancia());
     }
 }
