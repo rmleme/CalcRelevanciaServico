@@ -896,7 +896,7 @@ class ListaServicosTableModel extends AbstractTableModel {
 	}
     }
 
-    public Class getColumnClass(int columnIndex) {
+    public Class<?> getColumnClass(int columnIndex) {
 	return this.getValueAt(0, columnIndex).getClass();
     }
 }
