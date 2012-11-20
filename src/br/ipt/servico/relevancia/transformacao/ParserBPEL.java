@@ -451,13 +451,13 @@ public class ParserBPEL {
 	} else if (tActivityContainer.getTerminate() != null) {
 	    return tActivityContainer.getTerminate();
 	} else if (tActivityContainer.getFlow() != null) {
-	    return tActivityContainer.getTerminate();
+	    return tActivityContainer.getFlow();
 	} else if (tActivityContainer.getSwitch() != null) {
 	    return tActivityContainer.getSwitch();
 	} else if (tActivityContainer.getWhile() != null) {
 	    return tActivityContainer.getWhile();
 	} else if (tActivityContainer.getPick() != null) {
-	    return tActivityContainer.getWhile();
+	    return tActivityContainer.getPick();
 	} else if (tActivityContainer.getScope() != null) {
 	    return tActivityContainer.getScope();
 	} else {
@@ -485,13 +485,13 @@ public class ParserBPEL {
 	} else if (tWhile.getTerminate() != null) {
 	    return tWhile.getTerminate();
 	} else if (tWhile.getFlow() != null) {
-	    return tWhile.getTerminate();
+	    return tWhile.getFlow();
 	} else if (tWhile.getSwitch() != null) {
 	    return tWhile.getSwitch();
 	} else if (tWhile.getWhile() != null) {
 	    return tWhile.getWhile();
 	} else if (tWhile.getPick() != null) {
-	    return tWhile.getWhile();
+	    return tWhile.getPick();
 	} else if (tWhile.getScope() != null) {
 	    return tWhile.getScope();
 	} else {
@@ -519,13 +519,13 @@ public class ParserBPEL {
 	} else if (tOnMessage.getTerminate() != null) {
 	    return tOnMessage.getTerminate();
 	} else if (tOnMessage.getFlow() != null) {
-	    return tOnMessage.getTerminate();
+	    return tOnMessage.getFlow();
 	} else if (tOnMessage.getSwitch() != null) {
 	    return tOnMessage.getSwitch();
 	} else if (tOnMessage.getWhile() != null) {
 	    return tOnMessage.getWhile();
 	} else if (tOnMessage.getPick() != null) {
-	    return tOnMessage.getWhile();
+	    return tOnMessage.getPick();
 	} else if (tOnMessage.getScope() != null) {
 	    return tOnMessage.getScope();
 	} else {
@@ -553,13 +553,13 @@ public class ParserBPEL {
 	} else if (tScope.getTerminate() != null) {
 	    return tScope.getTerminate();
 	} else if (tScope.getFlow() != null) {
-	    return tScope.getTerminate();
+	    return tScope.getFlow();
 	} else if (tScope.getSwitch() != null) {
 	    return tScope.getSwitch();
 	} else if (tScope.getWhile() != null) {
 	    return tScope.getWhile();
 	} else if (tScope.getPick() != null) {
-	    return tScope.getWhile();
+	    return tScope.getPick();
 	} else if (tScope.getScope() != null) {
 	    return tScope.getScope();
 	} else {
